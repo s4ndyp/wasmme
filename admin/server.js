@@ -239,10 +239,13 @@ app.get("*", (req, res, next) => {
 
 app.use((err, _req, res, _next) => {
   const status = err.status || err.statusCode || 500;
-  const message =
-    status === 413
-      ? "Bestand te groot."
-      : err.message || "Interne serverfout";
+  let message = err.message || "Interne serverfout";
+  if (status === 413) {
+    message = "Bestand te groot.";
+  } else if (err.code === "EACCES") {
+    message =
+      "Geen schrijfrecht op data-volume (/data). Herbouw/pull de nieuwste admin-image (entrypoint zet rechten) of controleer volume-eigenaar.";
+  }
   console.error(err);
   res.status(status).json({ error: message });
 });
