@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WasmMe — WASM host</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="bg-grid" aria-hidden="true"></div>
+    <header class="header">
+      <div class="logo">
+        <span class="logo-mark" aria-hidden="true">◈</span>
+        <div>
+          <h1>WasmMe</h1>
+          <p class="tagline">Upload, publiceer, serveer op poort 80</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a class="ghost-link" id="liveSiteLink" href="/" target="_blank" rel="noopener" hidden>
+          Live site ↗
+        </a>
+        <span class="pill" id="healthPill">…</span>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="card status-card">
+        <h2>Status</h2>
+        <div class="status-grid">
+          <article class="stat">
+            <h3>Staging</h3>
+            <p class="stat-value" id="stagingFiles">—</p>
+            <p class="stat-meta" id="stagingMeta">—</p>
+          </article>
+          <article class="stat">
+            <h3>Gepubliceerd</h3>
+            <p class="stat-value" id="publishedFiles">—</p>
+            <p class="stat-meta" id="publishedMeta">—</p>
+          </article>
+        </div>
+        <p class="hint" id="indexHint"></p>
+      </section>
+
+      <section class="card">
+        <h2>Upload</h2>
+        <p class="lead">
+          Upload een zip met je WASM-build (HTML, JS, wasm, assets) of losse bestanden. Staging wordt
+          vervangen bij elke upload.
+        </p>
+
+        <div class="tabs" role="tablist">
+          <button type="button" class="tab active" data-tab="zip" role="tab" aria-selected="true">
+            Zip-archief
+          </button>
+          <button type="button" class="tab" data-tab="files" role="tab" aria-selected="false">
+            Losse bestanden
+          </button>
+        </div>
+
+        <div class="tab-panel" id="panel-zip">
+          <label class="dropzone" id="zipDrop">
+            <input type="file" id="zipInput" accept=".zip,application/zip" hidden />
+            <span class="drop-title">Sleep zip hierheen of klik om te kiezen</span>
+            <span class="drop-sub" id="zipName">Geen bestand gekozen</span>
+          </label>
+          <button type="button" class="btn primary" id="uploadZipBtn" disabled>Upload zip naar staging</button>
+        </div>
+
+        <div class="tab-panel hidden" id="panel-files">
+          <label class="dropzone" id="filesDrop">
+            <input type="file" id="filesInput" multiple hidden />
+            <span class="drop-title">Selecteer map of meerdere bestanden</span>
+            <span class="drop-sub" id="filesName">Geen bestanden gekozen</span>
+          </label>
+          <button type="button" class="btn primary" id="uploadFilesBtn" disabled>
+            Upload bestanden naar staging
+          </button>
+        </div>
+
+        <div class="row-actions">
+          <button type="button" class="btn ghost" id="clearStagingBtn">Staging legen</button>
+        </div>
+      </section>
+
+      <section class="card publish-card">
+        <div>
+          <h2>Publiceren</h2>
+          <p class="lead">
+            Kopieert staging naar de live map. Nginx serveert die inhoud op
+            <strong>poort 80</strong> van deze stack.
+          </p>
+        </div>
+        <button type="button" class="btn publish" id="publishBtn">Publiceer naar poort 80</button>
+      </section>
+    </main>
+
+    <div class="toast-region" id="toasts" aria-live="polite"></div>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

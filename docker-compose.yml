@@ -1,0 +1,31 @@
+# WasmMe — admin UI op poort 8080, gepubliceerde WASM-site op poort 80
+# Voor Dockhand: plak deze stack; image komt van GHCR na GitHub Actions build.
+
+services:
+  admin:
+    image: ghcr.io/s4ndyp/wasmme:latest
+    container_name: wasmme-admin
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: "8080"
+      DATA_DIR: /data
+      # Max zip/upload grootte in bytes (default 256MB)
+      MAX_UPLOAD_BYTES: "268435456"
+    volumes:
+      - wasmme-data:/data
+
+  public:
+    image: ghcr.io/s4ndyp/wasmme-public:latest
+    container_name: wasmme-public
+    restart: unless-stopped
+    depends_on:
+      - admin
+    ports:
+      - "80:80"
+    volumes:
+      - wasmme-data:/data:ro
+
+volumes:
+  wasmme-data:
